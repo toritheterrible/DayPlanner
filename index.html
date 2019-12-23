@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Day Planner</title>
+    <script src="moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+
+
+<body>
+    
+    
+    <div class="container">
+        <header class="jumbotron text-center">
+        
+        <h1 class="display-3">Work Day Schedule</h1>  
+        <br>
+        <h3> A Simple Calendar App for Scheduling Your Work Day</h3>  
+        <br>
+        <h4 id="current"></h4>
+       
+        
+
+        </header>
+
+         <div class="contents">
+
+         </div>   
+
+    </div>
+    
+
+
+
+</body>
+
+
+<script>
+
+function getLocalStorage(key) {
+    let value = localStorage.getItem(key);
+    if (value) {
+        $(`#text${key}`).text(value);
+    }
+}
+
+
+$( document ).ready(function() {
+
+    // my variables
+    current = moment().format('MMMM Do YYYY, h:mm:ss a')
+
+
+
+    //setting time
+    
+    var update = function() {
+    document.getElementById("current")
+    .innerHTML = moment().format('MMMM Do YYYY, h:mm:ss a');
+    }   
+    setInterval(update, 1000);
+
+
+    $("#current").append(current);
+
+    for (var i = 9; i < 18; i++) {
+
+        var colorsRow = $(`<div data-time=${i} id='${i}' class="row">`);
+            // colorsRow.addClass("row");
+        
+        var hourColumn = $("<div>" + formatAMPM(i) + "</div>");
+            hourColumn.addClass("col-sm-2 text-center p-3");
+
+
+        var textAreaColumn = $(`<textarea id = 'text${i}' class = "description">`);
+            textAreaColumn.addClass("col-sm-8 form-control");
+           
+
+        var submitButtonColumn = $(`<button class = "submit btn btn-info col-sm-2" id = ${i}><i class="fas fa-save"></i>`);
+            
+            // submitButtonColumn.text("Save")
+            // submitButtonColumn.addClass("btn btn-info col-sm-2")
+            // submitButtonColumn.innerHTML = '<i class="fa fa-trash-o" aria-hidden="true"></i>';
+
+        colorsRow.append(hourColumn, textAreaColumn, submitButtonColumn)
+
+        $(".contents").append(colorsRow);
+          
+        getLocalStorage(i);
+
+        
+    }
+
+
+    function formatAMPM(hours) {
+        
+        var ampm = hours >= 12 ? ' PM' : ' AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        return hours + ":00" + ampm;
+        console.log(hours)
+        
+    }
+    
+    formatAMPM();   
+
+
+    var color = function() {
+
+        var currentHour = moment().hour();
+        console.log(currentHour)
+            
+        for (var i = 9; i < 18; i++) {
+            console.log($(`#${i}`).data("time"))
+            
+            if ($(`#${i}`).data("time") < currentHour){
+                $(`#${i}`).addClass("alert alert-danger")
+                console.log("hi")
+            }
+
+            else if ($(`#${i}`).data("time") > currentHour) {
+                // $(`#${i}`).removeClass("alert alert-danger")
+                $(`#${i}`).addClass("alert alert-warning")
+                console.log("hi2")
+            }
+
+            else {  
+                $(`#${i}`).addClass("alert alert-success")
+                console.log("hi3")
+            }
+        }
+
+
+      
+    }
+//     setInterval(function() {
+//     color();
+// }, 1000);
+color();
+
+
+    $(".submit").on("click", function() {
+    
+    let eventId = $(this).attr('id'); 
+    eventText = $(this).parent().children(".description").val();
+    console.log(eventId)
+    console.log(eventText)
+    localStorage.setItem(eventId, eventText);
+
+})
+
+
+
+
+});
+
+
+
+
+</script>
+
+
+
+</html>
