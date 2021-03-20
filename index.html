@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
     
 </head>
@@ -17,7 +17,7 @@
 
 body {
     font-family: 'Titillium Web', sans-serif;
-    background-image: url(https://i.stack.imgur.com/fhEwl.png);
+    background-color: white;
 }
 </style>
 
@@ -25,7 +25,7 @@ body {
     
     
     <div class="container">
-        <header class="jumbotron text-center">
+        <header class="jumbotron text-center bg-dark text-light">
         
         <h1 class="display-3">Work Day Schedule</h1>  
         <br>
@@ -72,7 +72,7 @@ $( document ).ready(function() {
     document.getElementById("current")
     .innerHTML = moment().format('MMMM Do YYYY, h:mm:ss a');
     }   
-    setInterval(update, 1000);
+    setInterval(update, 5000);
 
 
     $("#current").append(current);
@@ -112,7 +112,7 @@ $( document ).ready(function() {
         hours = hours % 12;
         hours = hours ? hours : 12;
         return hours + ":00" + ampm;
-        console.log(hours)
+        // console.log(hours)
         
     }
     
@@ -122,43 +122,40 @@ $( document ).ready(function() {
     var color = function() {
 
         var currentHour = moment().hour();
+        // console.log(currentHour)
+
         console.log(currentHour)
             
         for (var i = 9; i < 18; i++) {
-            console.log($(`#${i}`).data("time"))
+            // console.log($(`#${i}`).data("time"))
             
             if ($(`#${i}`).data("time") < currentHour){
                 $(`#${i}`).addClass("alert alert-danger")
-                console.log("hi")
             }
 
             else if ($(`#${i}`).data("time") > currentHour) {
                 // $(`#${i}`).removeClass("alert alert-danger")
                 $(`#${i}`).addClass("alert alert-warning")
-                console.log("hi2")
             }
 
             else {  
                 $(`#${i}`).addClass("alert alert-success")
-                console.log("hi3")
             }
         }
 
 
       
     }
-//     setInterval(function() {
-//     color();
-// }, 1000);
-color();
+
+    setInterval(color, 1000);
 
 
     $(".submit").on("click", function() {
     
     let eventId = $(this).attr('id'); 
     eventText = $(this).parent().children(".description").val();
-    console.log(eventId)
-    console.log(eventText)
+    // console.log(eventId)
+    // console.log(eventText)
     localStorage.setItem(eventId, eventText);
 
 })
